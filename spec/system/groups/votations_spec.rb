@@ -16,12 +16,12 @@ RSpec.describe 'check if quorums are working correctly', :js do
     load_database
   end
 
-  def vote(classe = 'votegreen')
+  def vote(klass = 'votegreen')
     visit group_proposal_path(group, proposal)
     expect(page).to have_content(I18n.t('pages.proposals.vote_panel.single_title'))
     expect(page).to have_content(proposal.secret_vote ? I18n.t('pages.proposals.vote_panel.secret_vote') : I18n.t('pages.proposals.vote_panel.clear_vote'))
     page.execute_script 'window.confirm = function () { return true }'
-    find(".#{classe}").click
+    find(".#{klass}").click
     expect(page).to have_content(I18n.t('votations.create.confirm'))
     proposal.reload
   end
