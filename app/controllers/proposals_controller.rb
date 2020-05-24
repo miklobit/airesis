@@ -383,13 +383,13 @@ class ProposalsController < ApplicationController
     flash[:notice] = I18n.t('info.proposal.rank_recorderd')
     respond_to do |format|
       format.js { render 'rank' }
-      format.html { redirect_to :back }
+      format.html { redirect_back(fallback_location: proposal_path(@proposal)) }
     end
   rescue Exception => e
     log_error(e)
     flash[:error] = I18n.t('error.proposals.proposal_rank')
     respond_to do |format|
-      format.html { redirect_to :back }
+      format.html { redirect_back(fallback_location: proposal_path(@proposal)) }
       format.js { render 'proposals/errors/rank' }
     end
   end
@@ -419,7 +419,7 @@ class ProposalsController < ApplicationController
     return if @proposal.in_valutation?
     flash[:error] = I18n.t('error.proposals.proposal_not_valuating')
     respond_to do |format|
-      format.html { redirect_to :back }
+      format.html { redirect_back(fallback_location: proposal_path(@proposal)) }
       format.js { render 'proposals/errors/rank', layout: false }
     end
   end

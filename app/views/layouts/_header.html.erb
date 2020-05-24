@@ -2,4 +2,4 @@
 
 <%= render '/layouts/top_menu' %>
 
-<%= subscribe_to "/notifications/#{current_user.id}" if user_signed_in?%>
+<%= subscribe_to "/notifications/#{current_user.id}" if user_signed_in? && !Rails.env.test?%>

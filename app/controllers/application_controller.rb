@@ -275,7 +275,7 @@ class ApplicationController < ActionController::Base
         store_location
         flash[:error] = t('error.admin_required')
         if request.env['HTTP_REFERER']
-          redirect_to :back
+          redirect_back(fallback_location: root_path)
         else
           redirect_to proposals_path
         end

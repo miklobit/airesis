@@ -1,4 +1,4 @@
-<% if current_user %>
+<% if current_user && !Rails.env.test? %>
     <%= subscribe_to blog_blog_post_path(@blog_post.blog, @blog_post) %>
 <% end %>
 
