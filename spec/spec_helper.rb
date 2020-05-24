@@ -20,7 +20,7 @@ RSpec.configure do |config|
 
   Kernel.srand config.seed
 
-  if ENV['CI'].present?
+  if ENV['CI'] == 'true'
     config.verbose_retry = true
     config.around do |ex|
       ex.run_with_retry retry: 5
