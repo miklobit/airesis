@@ -96,7 +96,7 @@ class User < ActiveRecord::Base
   has_many :frm_mods, through: :memberships, class_name: 'Frm::Mod', source: :mod
 
   before_create :init
-  after_create :assign_tutorials, :block_alerts
+  after_create :assign_tutorials
 
   before_update :before_update_populate
 
@@ -160,18 +160,15 @@ class User < ActiveRecord::Base
     GeocodeUser.perform_in(5.seconds, id)
   end
 
-  def block_alerts
-    blocked_alerts.create(notification_type_id: NotificationType::NEW_VALUTATION_MINE)
-    blocked_alerts.create(notification_type_id: NotificationType::NEW_VALUTATION)
-    blocked_alerts.create(notification_type_id: NotificationType::NEW_PUBLIC_EVENTS)
-    blocked_alerts.create(notification_type_id: NotificationType::NEW_PUBLIC_PROPOSALS)
-  end
-
   def init
     self.rank ||= 0 # imposta il rank a zero se non è valorizzato
     self.receive_messages = true
     self.receive_newsletter = true
     update_borders
+    blocked_alerts.build(notification_type_id: NotificationType::NEW_VALUTATION_MINE)
+    blocked_alerts.build(notification_type_id: NotificationType::NEW_VALUTATION)
+    blocked_alerts.build(notification_type_id: NotificationType::NEW_PUBLIC_EVENTS)
+    blocked_alerts.build(notification_type_id: NotificationType::NEW_PUBLIC_PROPOSALS)
   end
 
   # geocode user setting his default time zone

@@ -26,4 +26,11 @@ RSpec.describe User do
       expect(described_class.by_interest_borders([InterestBorder.to_key(province)])).to include user
     end
   end
+
+  describe 'when created' do
+    it 'has some alerts blocked by default' do
+      user = create(:user)
+      expect(user.reload.blocked_alerts.count).to be >= 0
+    end
+  end
 end
