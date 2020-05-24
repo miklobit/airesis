@@ -35,14 +35,6 @@ RSpec.configure do |config|
     I18n.locale = I18n.default_locale = :'en-EU'
   end
 
-  config.before(:each, type: :system) do
-    driven_by :rack_test
-  end
-
-  config.before(:each, type: :system, js: true) do
-    driven_by :selenium_chrome_headless
-  end
-
   config.include FactoryBot::Syntax::Methods
   config.include Devise::Test::IntegrationHelpers, type: :request
   config.include Warden::Test::Helpers
@@ -59,11 +51,21 @@ RSpec.configure do |config|
     Capybara.server = :puma, { Silent: true }
   end
 
-  config.after(:each, type: :system, js: true) do
+  config.before(:each, type: :system) do
+    driven_by :rack_test
+  end
+
+  config.before(:each, type: :system, js: true) do
+    driven_by :selenium_chrome_headless
+  end
+
+  config.after(:each, type: :system, js: true) do |example|
     errors = page.driver.browser.manage.logs.get(:browser)
-    if errors.present?
+    if errors.present? && example.metadata[:ignore_javascript_errors].blank?
       aggregate_failures 'javascript errors' do
         errors.each do |error|
+          next if /Blocked attempt to show a 'beforeunload' confirmation panel/.match?(error.message)
+          next if /Cannot read property 'getSelectedElement' of null/.match?(error.message)
           expect(error.level).not_to eq('SEVERE'), error.message
           next unless error.level == 'WARNING'
 
