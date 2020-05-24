@@ -59,6 +59,21 @@ RSpec.configure do |config|
     Capybara.server = :puma, { Silent: true }
   end
 
+  config.after(:each, type: :system, js: true) do
+    errors = page.driver.browser.manage.logs.get(:browser)
+    if errors.present?
+      aggregate_failures 'javascript errors' do
+        errors.each do |error|
+          expect(error.level).not_to eq('SEVERE'), error.message
+          next unless error.level == 'WARNING'
+
+          warn 'WARN: javascript warning'
+          warn error.message
+        end
+      end
+    end
+  end
+
   config.before do |x|
     Rails.logger.debug("RSpec #{x.metadata[:location]} #{x.metadata[:description]}")
   end
