@@ -38,6 +38,5 @@ RSpec.configure do |config|
                        base_attrs.merge(name: '7 giorni', days_m: 7, seq: 3),
                        base_attrs.merge(name: '15 giorni', days_m: 15, seq: 4),
                        base_attrs.merge(name: '30 giorni', days_m: 30, seq: 5)])
-
   end
 end
