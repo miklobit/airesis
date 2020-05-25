@@ -12,6 +12,6 @@ class SearchParticipant < ActiveRecord::Base
     else
       ret = group.participation_requests.where(group_participation_request_status_id: status_id)
     end
-    ret.includes(user: :user_type).order('group_participations.created_at desc nulls last')
+    ret.includes(:user).order('group_participations.created_at desc nulls last')
   end
 end

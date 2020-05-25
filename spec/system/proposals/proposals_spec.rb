@@ -8,6 +8,7 @@ RSpec.describe 'create a proposal in his group', :js do
   let(:proposal) { create(:group_proposal, quorum: group.quorums.active.first, current_user_id: user.id, group_proposals: [GroupProposal.new(group: group)]) }
 
   before do
+    create(:proposal_category, :no_category)
     load_database
     login_as user, scope: :user
   end

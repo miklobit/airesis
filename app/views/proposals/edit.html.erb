@@ -57,7 +57,7 @@
         <div class="columns medium-12">
           <div class="inputs">
             <%= f.label :proposal_category_id %>
-            <%= f.select :proposal_category_id, options_for_select(ProposalCategory.all.collect { |p| [p.description, p.id, {'data-imagesrc' => image_path("proposal_categories/#{p.id}_s.png")}] }, @proposal.proposal_category_id), {}, {style: 'width:100%'} %>
+            <%= f.select :proposal_category_id, options_for_select(ProposalCategory.all.collect { |p| [p.description, p.id, {'data-imagesrc' => image_path("proposal_categories/#{p.name}_s.png")}] }, @proposal.proposal_category_id), {}, {style: 'width:100%'} %>
           </div>
         </div>
       </div>

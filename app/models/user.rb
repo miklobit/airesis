@@ -51,7 +51,6 @@ class User < ActiveRecord::Base
   has_many :proposal_comment_rankings, class_name: 'ProposalCommentRanking'
   has_many :proposal_rankings, class_name: 'ProposalRanking'
   has_many :proposal_revisions, inverse_of: :user
-  belongs_to :user_type, class_name: 'UserType', foreign_key: :user_type_id
   belongs_to :image, class_name: 'Image', foreign_key: :image_id, optional: true
   has_many :authentications, class_name: 'Authentication', dependent: :destroy
 
@@ -99,6 +98,8 @@ class User < ActiveRecord::Base
   after_create :assign_tutorials
 
   before_update :before_update_populate
+
+  enum user_type_id: { administrator: 1, moderator: 2, authenticated: 3 }, _prefix: true
 
   # Check for paperclip
   has_attached_file :avatar,
@@ -323,11 +324,11 @@ class User < ActiveRecord::Base
   end
 
   def admin?
-    user_type.short_name == 'admin'
+    user_type_id_administrator?
   end
 
   def moderator?
-    user_type.short_name == 'mod' || admin?
+    admin? || user_type_id_moderator?
   end
 
   # restituisce la richiesta di partecipazione
@@ -511,8 +512,8 @@ class User < ActiveRecord::Base
 
         user.sign_in_count = 0
         user.confirm
+        user.user_type_id = :authenticated
         user.save!
-        user.update!(user_type_id: UserType::AUTHENTICATED)
       end
     end
   end

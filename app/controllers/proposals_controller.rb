@@ -171,7 +171,7 @@ class ProposalsController < ApplicationController
       end
     end
 
-    @proposal.proposal_category_id = params[:category] || ProposalCategory::NO_CATEGORY
+    @proposal.proposal_category_id = params[:category] || ProposalCategory.find_by(name: 'no_category').id
 
     @proposal.proposal_type = ProposalType.find_by(name: (params[:proposal_type_id] || ProposalType::SIMPLE))
 
@@ -207,6 +207,7 @@ class ProposalsController < ApplicationController
         end
       end
     else
+      Rails.logger.error("Error while creating a Proposal. #{@proposal.errors.details}")
       if @proposal.errors[:title].present?
         @other = Proposal.find_by(title: @proposal.title)
         @err_msg = t('error.proposals.same_title')

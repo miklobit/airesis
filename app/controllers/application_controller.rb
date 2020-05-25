@@ -94,7 +94,7 @@ class ApplicationController < ActionController::Base
     return unless @blog
     @user = @blog.user
     @blog_posts = @blog.blog_posts.includes(:user, :blog, :tags).page(params[:page]).per(COMMENTS_PER_PAGE)
-    @recent_comments = @blog.comments.includes(:blog_post, user: [:image, :user_type]).order('created_at DESC').limit(10)
+    @recent_comments = @blog.comments.includes(:blog_post, user: [:image]).order('created_at DESC').limit(10)
     @recent_posts = @blog.blog_posts.published.limit(10)
     @archives = @blog.blog_posts.
                 select('COUNT(*) AS posts, extract(month from created_at) AS MONTH , extract(year from created_at) AS YEAR').
@@ -274,17 +274,13 @@ class ApplicationController < ActionController::Base
       format.html do # ritorna indietro oppure all'HomePage
         store_location
         flash[:error] = t('error.admin_required')
-        if request.env['HTTP_REFERER']
-          redirect_back(fallback_location: root_path)
-        else
-          redirect_to proposals_path
-        end
+        redirect_back(fallback_location: proposals_path)
       end
     end
   end
 
   def redirect_to_back(path)
-    redirect_to (request.env['HTTP_REFERER'] ? :back : path)
+    redirect_back(fallback_location: path)
   end
 
   # response if you do not have permissions to do an action
@@ -342,7 +338,7 @@ class ApplicationController < ActionController::Base
       @ranking = ProposalCommentRanking.new
       @ranking.user_id = current_user.id
       @ranking.proposal_comment_id = @proposal_comment.id
-      @ranking.ranking_type_id = RankingType::POSITIVE
+      @ranking.ranking_type_id = :positive
       @ranking.save!
 
       @generated_nickname = @proposal_comment.nickname_generated

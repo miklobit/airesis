@@ -58,7 +58,7 @@ el.parents('.vote-items-external').prev('.vote-items-external').find('.vote-item
 
     group.participants.sample(10).each do |user|
       proposal.rankings.find_or_create_by(user_id: user.id) do |ranking|
-        ranking.ranking_type_id = RankingType::POSITIVE
+        ranking.ranking_type_id = :positive
       end
     end
 
@@ -136,7 +136,7 @@ el.parents('.vote-items-external').prev('.vote-items-external').find('.vote-item
 
     group.participants.sample(10).each do |user|
       proposal.rankings.find_or_create_by(user_id: user.id) do |ranking|
-        ranking.ranking_type_id = RankingType::POSITIVE
+        ranking.ranking_type_id = :positive
       end
     end
 
@@ -210,7 +210,7 @@ el.parents('.vote-items-external').prev('.vote-items-external').find('.vote-item
 
     group.participants.sample(3).each do |user|
       proposal.rankings.find_or_create_by(user_id: user.id) do |ranking|
-        ranking.ranking_type_id = RankingType::POSITIVE
+        ranking.ranking_type_id = :positive
       end
     end
 
@@ -260,7 +260,7 @@ el.parents('.vote-items-external').prev('.vote-items-external').find('.vote-item
 
     group.participants.sample(3).each do |user|
       proposal.rankings.find_or_create_by(user_id: user.id) do |ranking|
-        ranking.ranking_type_id = RankingType::POSITIVE
+        ranking.ranking_type_id = :positive
       end
     end
 
@@ -294,7 +294,7 @@ el.parents('.vote-items-external').prev('.vote-items-external').find('.vote-item
 
     group.participants.each do |user|
       proposal.rankings.find_or_create_by(user_id: user.id) do |ranking|
-        ranking.ranking_type_id = RankingType::POSITIVE
+        ranking.ranking_type_id = :positive
       end
     end
 
